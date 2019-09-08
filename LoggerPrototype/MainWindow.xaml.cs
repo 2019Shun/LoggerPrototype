@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.IO;
 using System.IO.Ports;
 
 namespace LoggerPrototype
@@ -22,36 +23,81 @@ namespace LoggerPrototype
     public partial class MainWindow : Window
     {
         /// <summary>
+        /// 画面に表示する文字列を管理するDisplayString
+        /// </summary>
+        private DisplayString _displayString;
+
+        /// <summary>
+        /// C#のシリアル通信ライブラリ
+        /// </summary>
+        private SerialPort _serialPort;
+
+        /// <summary>
+        /// 自動スクロールのオンオフを管理するプロパティ
+        /// </summary>
+        private bool _enableAutoScroll
+        {
+            get { return MenuItemAutoScroll.IsChecked; }
+            set { MenuItemAutoScroll.IsChecked = value; }
+        }
+        
+        /// <summary>
         /// コンストラクタ
         /// </summary>
         public MainWindow()
         {
             InitializeComponent();
 
-            //LogTextScroll.ScrollToEnd();
+            ConnectSerialInterface();
 
+            _displayString = new DisplayString();
+            _enableAutoScroll = true;
+        }
+
+        /// <summary>
+        /// シリアルポートと接続する処理
+        /// 選択ウィンドウを表示する
+        /// </summary>
+        public void ConnectSerialInterface()
+        {
+            if (_serialPort != null)
+            {
+                _serialPort.Close();
+                _serialPort = null;
+            }
             var selectSerial = new SelectSerialPort();
-            selectSerial.OpenSerialPort = OpenSerialPortTest;
+            selectSerial.OpenSerialPort = OpenSerialPort;
             selectSerial.Show();
         }
 
-        public void OpenSerialPortTest(string port, int baud)
+        /// <summary>
+        /// 指定されたシリアルポートを開く
+        /// </summary>
+        /// <param name="port">ポート名(ex."COM4")</param>
+        /// <param name="baud">ボーレート</param>
+        public void OpenSerialPort(string port, int baud)
         {
-            SerialPort serialPort = new SerialPort();
-            serialPort.PortName = port;
-            serialPort.BaudRate = baud;
-            serialPort.NewLine = Environment.NewLine;
+            if (_serialPort != null)
+            {
+                _serialPort.Close();
+                _serialPort = null;
+            }
+            _serialPort = new SerialPort();
+            _serialPort.PortName = port;
+            _serialPort.BaudRate = baud;
+            _serialPort.NewLine = Environment.NewLine;
             //SerialPort.Parity = System.IO.Ports.Parity.None;
             //SerialPort.DataBits = 8;
             //SerialPort.StopBits = System.IO.Ports.StopBits.One;
             //SerialPort.Handshake = System.IO.Ports.Handshake.None;
-            serialPort.Open();
+            _serialPort.Open();
 
-            serialPort.DiscardInBuffer();
-            SerialLogTextBox.Document.Blocks.Clear();
-            PrintInfo("Started communication with " + serialPort.PortName);
+            _serialPort.DiscardInBuffer();
+            _displayString.Clear();
 
-            serialPort.DataReceived += new SerialDataReceivedEventHandler(SerialPort_DataReceivedHandler);
+            //PrintInfo("Started communication with " + _serialPort.PortName);
+
+            _serialPort.DataReceived += new SerialDataReceivedEventHandler(SerialPort_DataReceivedHandler);
 
         }
 
@@ -61,10 +107,21 @@ namespace LoggerPrototype
         /// <param name="str"></param>
         public void Print(string str)
         {
-            TextRange rangeOfText = new TextRange(SerialLogTextBox.Document.ContentEnd, SerialLogTextBox.Document.ContentEnd);
-            rangeOfText.Text = str;
-            rangeOfText.ApplyPropertyValue(TextElement.ForegroundProperty, Brushes.White);
-            SerialLogTextScroll.ScrollToEnd();
+            //TextRange rangeOfText = new TextRange(SerialLogTextBox.Document.ContentEnd, SerialLogTextBox.Document.ContentEnd);
+            //rangeOfText.Text = str;
+            //rangeOfText.ApplyPropertyValue(TextElement.ForegroundProperty, Brushes.White);
+            //SerialLogTextScroll.ScrollToEnd();
+            //_displayContents += str;
+            //SerialLogTextBox.Text = _displayContents;
+
+            _displayString.Append(str);
+
+            SerialLogTextBox.Text = _displayString.GetString();
+
+            if (_enableAutoScroll)
+            {
+                SerialLogTextScroll.ScrollToEnd();
+            }
         }
 
         /// <summary>
@@ -74,11 +131,12 @@ namespace LoggerPrototype
         /// <param name="str"></param>
         public void PrintInfo(string str)
         {
-            TextRange rangeOfText = new TextRange(SerialLogTextBox.Document.ContentEnd, SerialLogTextBox.Document.ContentEnd);
-            rangeOfText.Text = "[INFO] " + str;
-            rangeOfText.ApplyPropertyValue(TextElement.ForegroundProperty, Brushes.Blue);
-            SerialLogTextScroll.ScrollToEnd();
-            SerialLogTextBox.AppendText(Environment.NewLine);
+            //TextRange rangeOfText = new TextRange(SerialLogTextBox.Document.ContentEnd, SerialLogTextBox.Document.ContentEnd);
+            //rangeOfText.Text = "[INFO] " + str;
+            //rangeOfText.ApplyPropertyValue(TextElement.ForegroundProperty, Brushes.Blue);
+            //SerialLogTextScroll.ScrollToEnd();
+            //SerialLogTextBox.AppendText(Environment.NewLine);
+            //SerialLogTextBox.Text += str;
         }
 
         /// <summary>
@@ -88,21 +146,32 @@ namespace LoggerPrototype
         /// <param name="str"></param>
         public void PrintWarning(string str)
         {
-            TextRange rangeOfText = new TextRange(SerialLogTextBox.Document.ContentEnd, SerialLogTextBox.Document.ContentEnd);
-            rangeOfText.Text = "[WARN] " + str;
-            rangeOfText.ApplyPropertyValue(TextElement.ForegroundProperty, Brushes.Red);
-            SerialLogTextScroll.ScrollToEnd();
-            SerialLogTextBox.AppendText(Environment.NewLine);
+            //TextRange rangeOfText = new TextRange(SerialLogTextBox.Document.ContentEnd, SerialLogTextBox.Document.ContentEnd);
+            //rangeOfText.Text = "[WARN] " + str;
+            //rangeOfText.ApplyPropertyValue(TextElement.ForegroundProperty, Brushes.Red);
+            //SerialLogTextScroll.ScrollToEnd();
+            //SerialLogTextBox.AppendText(Environment.NewLine);
+            //SerialLogTextBox.Text += str;
         }
 
+        /// <summary>
+        /// デバッグ用．後で消す
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void MenuItem_Click(object sender, RoutedEventArgs e)
         {
             //SerialLogTextBox.Text += "test\ntest\ntest\ntest\ntest\n";
             //SerialLogTextBox.AppendText("test");
 
-            PrintWarning("test ");
+            //PrintWarning("test ");
         }
 
+        /// <summary>
+        /// シリアルポートからデータを受信した際に実行されるイベントハンドラ
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void SerialPort_DataReceivedHandler(object sender, System.IO.Ports.SerialDataReceivedEventArgs e)
         {
             try
@@ -128,14 +197,45 @@ namespace LoggerPrototype
             }
         }
 
+        /// <summary>
+        /// 表示している文字列を消去
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void MenuTextItemClear_Click(object sender, RoutedEventArgs e)
         {
-            SerialLogTextBox.Document.Blocks.Clear();
+            _displayString.Clear();
         }
 
-        private void MenuFinish_Click(object sender, RoutedEventArgs e)
+        /// <summary>
+        /// アプリケーションの終了 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void MenuApplicationShutdown_Click(object sender, RoutedEventArgs e)
         {
-            Close();
+            Application.Current.Shutdown();
+        }
+
+        /// <summary>
+        /// シリアルポートを切断する
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void MenuItemSerialPortClose_Click(object sender, RoutedEventArgs e)
+        {
+            _serialPort.Close();
+        }
+
+        /// <summary>
+        /// シリアルポートと接続するための処理を実行．
+        /// もともとシリアルポートと接続していた場合は切断する．
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void MenuItemConnectSerialPort_Click(object sender, RoutedEventArgs e)
+        {
+            ConnectSerialInterface();
         }
     }
 }

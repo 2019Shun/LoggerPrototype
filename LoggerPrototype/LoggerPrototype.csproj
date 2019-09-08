@@ -56,6 +56,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="DisplayString.cs" />
     <Compile Include="SelectSerialPort.xaml.cs">
       <DependentUpon>SelectSerialPort.xaml</DependentUpon>
     </Compile>

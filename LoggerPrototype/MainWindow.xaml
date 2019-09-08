@@ -9,12 +9,15 @@
     <Grid>
         <Menu>
             <MenuItem Header="ファイル(_F)">
-                <MenuItem IsCheckable="False" Header="新しい接続" />
+                <MenuItem IsCheckable="False" Header="新しい接続" Click="MenuItemConnectSerialPort_Click" />
                 <MenuItem IsCheckable="False" Header="Debug" Click="MenuItem_Click" />
-                <MenuItem IsCheckable="False" Header="終了" Click="MenuFinish_Click"/>
+                <Separator />
+                <MenuItem IsCheckable="False" Header="接続断" Click="MenuItemSerialPortClose_Click" />
+                <MenuItem IsCheckable="False" Header="終了" Click="MenuApplicationShutdown_Click"/>
             </MenuItem>
             <MenuItem Header="編集(_E)">
                 <MenuItem IsCheckable="False" Header="設定" />
+                <MenuItem x:Name="MenuItemAutoScroll" IsCheckable="True" Header="自動スクロール" />
                 <MenuItem IsCheckable="False" Header="クリア" Click="MenuTextItemClear_Click" />
             </MenuItem>
             <MenuItem Header="表示(_V)">
@@ -23,14 +26,14 @@
             </MenuItem>
         </Menu>
         <ScrollViewer x:Name ="SerialLogTextScroll" Margin="0,20,0,0" VerticalScrollBarVisibility="Visible" Background="Black">
-            <!--<TextBlock x:Name="SerialLogTextBox" TextWrapping="Wrap" Text="test" VerticalAlignment="Top" Background="Black" Foreground="AntiqueWhite"/>-->
-            <RichTextBox x:Name="SerialLogTextBox" Background="Black" Block.LineHeight="1">
+            <TextBlock x:Name="SerialLogTextBox" TextWrapping="Wrap" VerticalAlignment="Top" Background="Black" Foreground="AntiqueWhite"/>
+            <!--<RichTextBox x:Name="SerialLogTextBox" Background="Black" Block.LineHeight="1">
                 <FlowDocument>
                     <Paragraph>
                         <Run Foreground="AntiqueWhite"/>
                     </Paragraph>
                 </FlowDocument>
-            </RichTextBox>
+            </RichTextBox>-->
         </ScrollViewer>
         
     </Grid>
