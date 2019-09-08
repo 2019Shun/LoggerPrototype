@@ -1,0 +1,37 @@
+﻿<Window x:Class="LoggerPrototype.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:LoggerPrototype"
+        mc:Ignorable="d"
+        Title="Serial Logger" Height="400" Width="600">
+    <Grid>
+        <Menu>
+            <MenuItem Header="ファイル(_F)">
+                <MenuItem IsCheckable="False" Header="新しい接続" />
+                <MenuItem IsCheckable="False" Header="Debug" Click="MenuItem_Click" />
+                <MenuItem IsCheckable="False" Header="終了" Click="MenuFinish_Click"/>
+            </MenuItem>
+            <MenuItem Header="編集(_E)">
+                <MenuItem IsCheckable="False" Header="設定" />
+                <MenuItem IsCheckable="False" Header="クリア" Click="MenuTextItemClear_Click" />
+            </MenuItem>
+            <MenuItem Header="表示(_V)">
+                <MenuItem IsCheckable="False" Header="ログ" />
+                <MenuItem IsCheckable="False" Header="6面体アンテナ" />
+            </MenuItem>
+        </Menu>
+        <ScrollViewer x:Name ="SerialLogTextScroll" Margin="0,20,0,0" VerticalScrollBarVisibility="Visible" Background="Black">
+            <!--<TextBlock x:Name="SerialLogTextBox" TextWrapping="Wrap" Text="test" VerticalAlignment="Top" Background="Black" Foreground="AntiqueWhite"/>-->
+            <RichTextBox x:Name="SerialLogTextBox" Background="Black" Block.LineHeight="1">
+                <FlowDocument>
+                    <Paragraph>
+                        <Run Foreground="AntiqueWhite"/>
+                    </Paragraph>
+                </FlowDocument>
+            </RichTextBox>
+        </ScrollViewer>
+        
+    </Grid>
+</Window>

@@ -1,0 +1,22 @@
+﻿<Window x:Class="LoggerPrototype.SelectSerialPort"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:LoggerPrototype"
+        mc:Ignorable="d"
+        Title="SelectSerialPort" Height="200" Width="400">
+    <Grid>
+        <Border BorderBrush="Black" BorderThickness="1" Margin="10,10,10,0" VerticalAlignment="Top" Height="90">
+            <UniformGrid Columns="1">
+                <ComboBox x:Name="SerialComPort" Margin="10,10,10,10"/>
+                <ComboBox x:Name="SerialBaudRate" Margin="10,10,10,10"/>
+            </UniformGrid>
+        </Border>
+        <UniformGrid Columns="3"  Margin="40,105,40,0" VerticalAlignment="Top">
+            <Button x:Name="SerialStartBtn" Content="接続" Margin="10,10,10,10" Width="75" FontSize="14" VerticalAlignment="Top" Height="30" Click="SerialStartBtn_Click"/>
+            <Button x:Name="SerialCancelBtn" Content="キャンセル" Margin="10,10,10,10" Width="75" FontSize="14" VerticalAlignment="Top" Height="30" Click="SerialCancelBtn_Click"/>
+            <Button x:Name="SerialUpdateBtn" Content="更新" Margin="10,10,10,10" Width="75" FontSize="14" VerticalAlignment="Top" Height="30" Click="SerialUpdateBtn_Click"/>
+        </UniformGrid>
+    </Grid>
+</Window>
