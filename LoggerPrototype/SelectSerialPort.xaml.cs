@@ -90,7 +90,6 @@ namespace LoggerPrototype
             return ExtractPortNum.Replace(name, "$1");
         }
 
-
         /// <summary>
         /// 選択したBaudRateを取得
         /// </summary>
@@ -100,6 +99,8 @@ namespace LoggerPrototype
             string baudRateValue = (string)SerialBaudRate.SelectedItem;
             return int.Parse(baudRateValue);
         }
+
+        /**** 以下イベントハンドラ ****/
 
         private void SerialStartBtn_Click(object sender, RoutedEventArgs e)
         {

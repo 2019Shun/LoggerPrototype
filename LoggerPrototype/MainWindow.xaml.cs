@@ -91,14 +91,30 @@ namespace LoggerPrototype
             //SerialPort.StopBits = System.IO.Ports.StopBits.One;
             //SerialPort.Handshake = System.IO.Ports.Handshake.None;
             _serialPort.Open();
-
             _serialPort.DiscardInBuffer();
-            _displayString.Clear();
 
-            //PrintInfo("Started communication with " + _serialPort.PortName);
+            DisplayClear();
+            PrintInfo("Started communication with " + _serialPort.PortName);
 
             _serialPort.DataReceived += new SerialDataReceivedEventHandler(SerialPort_DataReceivedHandler);
 
+        }
+
+        /// <summary>
+        /// シリアルポートが開かれていた場合，strを送信
+        /// 右側画面に送信した文字列を出力
+        /// </summary>
+        /// <param name="str"></param>
+        private void SerialWriteString(string str)
+        {
+            if (_serialPort.IsOpen == false)
+            {
+                PrintWarning("Serial port is not opened.");
+                return;
+            }
+
+            _serialPort.Write(str);
+            PrintData(str);
         }
 
         /// <summary>
@@ -107,13 +123,6 @@ namespace LoggerPrototype
         /// <param name="str"></param>
         public void Print(string str)
         {
-            //TextRange rangeOfText = new TextRange(SerialLogTextBox.Document.ContentEnd, SerialLogTextBox.Document.ContentEnd);
-            //rangeOfText.Text = str;
-            //rangeOfText.ApplyPropertyValue(TextElement.ForegroundProperty, Brushes.White);
-            //SerialLogTextScroll.ScrollToEnd();
-            //_displayContents += str;
-            //SerialLogTextBox.Text = _displayContents;
-
             _displayString.Append(str);
 
             SerialLogTextBox.Text = _displayString.GetString();
@@ -125,34 +134,57 @@ namespace LoggerPrototype
         }
 
         /// <summary>
-        /// 文字の出力：青
-        /// 最後に改行を入れる
+        /// 文字の出力：青，右側の画面
+        /// </summary>
+        /// <param name="str"></param>
+        public void PrintData(string str)
+        {
+            TextRange rangeOfText = new TextRange(SerialLogTextBox2.Document.ContentEnd, SerialLogTextBox2.Document.ContentEnd);
+            rangeOfText.Text = "[SEND] " + str;
+            rangeOfText.ApplyPropertyValue(TextElement.ForegroundProperty, Brushes.AntiqueWhite);
+            SerialLogTextScroll2.ScrollToEnd();
+            SerialLogTextBox2.AppendText(Environment.NewLine);
+        }
+
+        /// <summary>
+        /// 文字の出力：青，右側の画面
         /// </summary>
         /// <param name="str"></param>
         public void PrintInfo(string str)
         {
-            //TextRange rangeOfText = new TextRange(SerialLogTextBox.Document.ContentEnd, SerialLogTextBox.Document.ContentEnd);
-            //rangeOfText.Text = "[INFO] " + str;
-            //rangeOfText.ApplyPropertyValue(TextElement.ForegroundProperty, Brushes.Blue);
-            //SerialLogTextScroll.ScrollToEnd();
-            //SerialLogTextBox.AppendText(Environment.NewLine);
-            //SerialLogTextBox.Text += str;
+            TextRange rangeOfText = new TextRange(SerialLogTextBox2.Document.ContentEnd, SerialLogTextBox2.Document.ContentEnd);
+            rangeOfText.Text = "[INFO] " + str;
+            rangeOfText.ApplyPropertyValue(TextElement.ForegroundProperty, Brushes.Aquamarine);
+            SerialLogTextScroll2.ScrollToEnd();
+            SerialLogTextBox2.AppendText(Environment.NewLine);
         }
 
         /// <summary>
-        /// 文字の出力：赤
-        /// 最後に改行を入れる
+        /// 文字の出力：赤，右側の画面
         /// </summary>
         /// <param name="str"></param>
         public void PrintWarning(string str)
         {
-            //TextRange rangeOfText = new TextRange(SerialLogTextBox.Document.ContentEnd, SerialLogTextBox.Document.ContentEnd);
-            //rangeOfText.Text = "[WARN] " + str;
-            //rangeOfText.ApplyPropertyValue(TextElement.ForegroundProperty, Brushes.Red);
-            //SerialLogTextScroll.ScrollToEnd();
-            //SerialLogTextBox.AppendText(Environment.NewLine);
-            //SerialLogTextBox.Text += str;
+            TextRange rangeOfText = new TextRange(SerialLogTextBox2.Document.ContentEnd, SerialLogTextBox2.Document.ContentEnd);
+            rangeOfText.Text = "[WARN] " + str;
+            rangeOfText.ApplyPropertyValue(TextElement.ForegroundProperty, Brushes.IndianRed);
+            SerialLogTextScroll2.ScrollToEnd();
+            SerialLogTextBox2.AppendText(Environment.NewLine);
         }
+
+        /// <summary>
+        /// 出力画面のクリア
+        /// </summary>
+        private void DisplayClear()
+        {
+            _displayString.Clear();
+            SerialLogTextBox.Text = "";
+
+            ///右側の画面出力はクリアしなくてもいい？
+            //SerialLogTextBox2.Document.Blocks.Clear();
+        }
+
+        /**** 以下イベントハンドラ ****/
 
         /// <summary>
         /// デバッグ用．後で消す
@@ -161,10 +193,7 @@ namespace LoggerPrototype
         /// <param name="e"></param>
         private void MenuItem_Click(object sender, RoutedEventArgs e)
         {
-            //SerialLogTextBox.Text += "test\ntest\ntest\ntest\ntest\n";
-            //SerialLogTextBox.AppendText("test");
-
-            //PrintWarning("test ");
+            PrintWarning("test");
         }
 
         /// <summary>
@@ -204,7 +233,7 @@ namespace LoggerPrototype
         /// <param name="e"></param>
         private void MenuTextItemClear_Click(object sender, RoutedEventArgs e)
         {
-            _displayString.Clear();
+            DisplayClear();
         }
 
         /// <summary>
@@ -225,6 +254,7 @@ namespace LoggerPrototype
         private void MenuItemSerialPortClose_Click(object sender, RoutedEventArgs e)
         {
             _serialPort.Close();
+            PrintInfo("Disconnected with " + _serialPort.PortName);
         }
 
         /// <summary>
@@ -236,6 +266,17 @@ namespace LoggerPrototype
         private void MenuItemConnectSerialPort_Click(object sender, RoutedEventArgs e)
         {
             ConnectSerialInterface();
+        }
+
+        /// <summary>
+        /// 入力受け取り
+        /// たぶん黒い画面にフォーカスがあってればこのイベントハンドラに入るはず
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void UniformGrid_TextInput(object sender, TextCompositionEventArgs e)
+        {
+            SerialWriteString(e.Text);
         }
     }
 }

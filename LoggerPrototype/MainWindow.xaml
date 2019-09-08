@@ -25,16 +25,21 @@
                 <MenuItem IsCheckable="False" Header="6面体アンテナ" />
             </MenuItem>
         </Menu>
-        <ScrollViewer x:Name ="SerialLogTextScroll" Margin="0,20,0,0" VerticalScrollBarVisibility="Visible" Background="Black">
-            <TextBlock x:Name="SerialLogTextBox" TextWrapping="Wrap" VerticalAlignment="Top" Background="Black" Foreground="AntiqueWhite"/>
-            <!--<RichTextBox x:Name="SerialLogTextBox" Background="Black" Block.LineHeight="1">
-                <FlowDocument>
-                    <Paragraph>
-                        <Run Foreground="AntiqueWhite"/>
-                    </Paragraph>
-                </FlowDocument>
-            </RichTextBox>-->
-        </ScrollViewer>
-        
+        <Grid Margin="0, 0, 0,0">
+            <UniformGrid Rows="1" Columns="2" TextInput="UniformGrid_TextInput">
+                <ScrollViewer x:Name ="SerialLogTextScroll" Margin="0,20,0,0" VerticalScrollBarVisibility="Visible" Background="Black">
+                    <TextBlock x:Name="SerialLogTextBox" TextWrapping="Wrap" VerticalAlignment="Top" Background="Black" Foreground="AntiqueWhite"/>
+                </ScrollViewer>
+                <ScrollViewer x:Name ="SerialLogTextScroll2" Margin="0,20,0,0" VerticalScrollBarVisibility="Visible" Background="Black">
+                    <RichTextBox x:Name="SerialLogTextBox2" Background="Black" Block.LineHeight="1" IsReadOnly="True">
+                        <FlowDocument>
+                            <Paragraph>
+                                <Run Foreground="AntiqueWhite"/>
+                            </Paragraph>
+                        </FlowDocument>
+                    </RichTextBox>
+                </ScrollViewer>
+            </UniformGrid>
+        </Grid>
     </Grid>
 </Window>
