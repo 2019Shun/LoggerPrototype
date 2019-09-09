@@ -107,13 +107,7 @@ namespace LoggerPrototype
         /// <param name="str"></param>
         private void SerialWriteString(string str)
         {
-            if(_serialPort == null)
-            {
-                PrintWarning("Serial port is not opened.");
-                return;
-            }
-
-            if (_serialPort.IsOpen == false)
+            if ((_serialPort?.IsOpen ?? false) == false)
             {
                 PrintWarning("Serial port is not opened.");
                 return;
