@@ -1,0 +1,37 @@
+﻿<Window x:Class="LoggerPrototype.LogControl"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:LoggerPrototype"
+        mc:Ignorable="d"
+        ResizeMode="NoResize"
+        Title="LogControl" Height="205" Width="450">
+    <Grid>
+        <Border BorderBrush="Black" BorderThickness="1" Margin="10,10,10,0" VerticalAlignment="Top" Height="100">
+            <UniformGrid Columns="1" Rows="3">
+                <Grid Margin="10,5,10,5">
+                    <TextBlock Text="保存フォルダ" Margin="0,0,330,0" TextAlignment="Center" FontSize="12" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                    <TextBox x:Name="SaveFolderTextBox" Margin="80,0,80,0" VerticalAlignment="Center" FontSize="14" IsReadOnly="True"/>
+                    <Button x:Name="OpenFolder" Content="開く(_O)" FontSize="12" Margin="330,0,0,0" Click="OpenFolder_Click"/>
+                </Grid>
+                <Grid Margin="10,5,10,5">
+                    <TextBlock Text="プレフィックス" Margin="0,0,330,0" TextAlignment="Left" FontSize="12" VerticalAlignment="Center" HorizontalAlignment="Center" />
+                    <TextBox x:Name="SaveFilePrefix" Margin="80,0,0,0" VerticalAlignment="Center" FontSize="14" InputMethod.IsInputMethodEnabled="False" PreviewTextInput="SaveFilePrefix_PreviewTextInput" />
+                </Grid>
+                <Grid Margin="10,5,10,5">
+                    <TextBlock Text="コース" Margin="0,0,330,0" TextAlignment="Left" FontSize="12" VerticalAlignment="Center" HorizontalAlignment="Center" />
+                    <TextBox x:Name="SaveCourse" Margin="80,0,200,0" VerticalAlignment="Center" FontSize="14" InputMethod.IsInputMethodEnabled="False" PreviewTextInput="SaveCourse_PreviewTextInput" CommandManager.PreviewExecuted="SaveCourse_PreviewExecuted" TextChanged="SaveCourse_TextChanged" />
+                    <TextBlock Text="保存サイズ" Margin="80,0,0,0" TextAlignment="Left" FontSize="12" VerticalAlignment="Center" HorizontalAlignment="Center" />
+                    <TextBox x:Name="SaveCapacity" Margin="280,0,00,0" VerticalAlignment="Center" FontSize="14" IsReadOnly="True"/>
+                </Grid>
+            </UniformGrid>
+        </Border>
+        <UniformGrid Columns="3"  Margin="20,115,20,0" VerticalAlignment="Top">
+            <Button x:Name="LogStartBtn" Content="開始(_S)" Margin="0,5,0,5" Width="100" FontSize="14" VerticalAlignment="Top" Height="30" Click="LogStartBtn_Click"/>
+            <Button x:Name="LogTemplBtn" Content="一時停止(_R)" Margin="0,5,0,5" Width="100" FontSize="14" VerticalAlignment="Top" Height="30" Click="LogTemplBtn_Click" />
+            <Button x:Name="LogEndBtn" Content="終了(_T)" Margin="0,5,0,5" Width="100" FontSize="14" VerticalAlignment="Top" Height="30" Click="LogEndBtn_Click" />
+        </UniformGrid>
+        <!--<StatusBar x:Name="StatusBar" Height="23" VerticalAlignment="Bottom" HorizontalAlignment="Stretch" />-->
+    </Grid>
+</Window>

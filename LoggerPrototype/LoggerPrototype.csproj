@@ -38,6 +38,7 @@
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Management" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -57,9 +58,17 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="DisplayString.cs" />
+    <Compile Include="LogControl.xaml.cs">
+      <DependentUpon>LogControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="LogManagement.cs" />
     <Compile Include="SelectSerialPort.xaml.cs">
       <DependentUpon>SelectSerialPort.xaml</DependentUpon>
     </Compile>
+    <Page Include="LogControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

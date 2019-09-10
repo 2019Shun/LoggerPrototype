@@ -32,6 +32,8 @@ namespace LoggerPrototype
         /// </summary>
         private SerialPort _serialPort;
 
+        private LogManagement _logManagement;
+
         /// <summary>
         /// 自動スクロールのオンオフを管理するプロパティ
         /// </summary>
@@ -49,6 +51,7 @@ namespace LoggerPrototype
             InitializeComponent();
 
             ConnectSerialInterface();
+            LogManagementInterface();
 
             _displayString = new DisplayString();
             _enableAutoScroll = true;
@@ -94,7 +97,7 @@ namespace LoggerPrototype
             _serialPort.DiscardInBuffer();
 
             DisplayClear();
-            PrintInfo("Started communication with " + _serialPort.PortName);
+            PrintInfo(_serialPort.PortName + "と通信を開始しました．");
 
             _serialPort.DataReceived += new SerialDataReceivedEventHandler(SerialPort_DataReceivedHandler);
 
@@ -109,12 +112,33 @@ namespace LoggerPrototype
         {
             if ((_serialPort?.IsOpen ?? false) == false)
             {
-                PrintWarning("Serial port is not opened.");
+                PrintWarning("シリアルポートが開かれていません．");
                 return;
             }
 
             _serialPort.Write(str);
             PrintData(str);
+        }
+
+        /// <summary>
+        /// ログ関係
+        /// ログコントロールウィンドウを表示
+        /// </summary>
+        private void LogManagementInterface()
+        {
+            if(_logManagement != null)
+            {
+                _logManagement = null;
+            }
+
+            _logManagement = new LogManagement();
+
+            var logControl = new LogControl();
+            logControl.SetEnableWriting = _logManagement.SetEnableWriting;
+            logControl.SetSaveFilePath = _logManagement.SetSaveFilePath;
+            logControl.PrintInfo = PrintInfo;
+            logControl.Show();
+            _logManagement.SetSaveFileCapacity = logControl.SetSaveFileCapacity;
         }
 
         /// <summary>
@@ -211,6 +235,7 @@ namespace LoggerPrototype
                         SerialPort serialPort = (SerialPort)sender;
                         string str = serialPort.ReadExisting();
                         Print(str);
+                        _logManagement?.LogManagementString(str);
                     })
                 );
             }
@@ -254,7 +279,7 @@ namespace LoggerPrototype
         private void MenuItemSerialPortClose_Click(object sender, RoutedEventArgs e)
         {
             _serialPort.Close();
-            PrintInfo("Disconnected with " + _serialPort.PortName);
+            PrintInfo(_serialPort.PortName + "と通信を切断しました．");
         }
 
         /// <summary>
