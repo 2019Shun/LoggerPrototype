@@ -44,6 +44,8 @@ namespace LoggerPrototype
         /// 現在のコース番号
         /// </summary>
         private int _courseNum;
+
+        private string _saveFileTime;
         
         /// <summary>
         /// 現在のコース番号をstringで扱う際のプロパティ
@@ -97,10 +99,23 @@ namespace LoggerPrototype
         /// <summary>
         /// 画面の情報から保存パスを取得
         /// </summary>
+        /// <param name="initialize">開始の際にtureにする．時刻指定のため必要</param>
         /// <returns></returns>
-        private string GetSaveFilePath()
+        private string GetSaveFilePath(bool initialize = false)
         {
-            return SaveFolderTextBox.Text + "\\" + SaveFilePrefix.Text + courseNum + ".log";
+            if (initialize)
+            {
+                _saveFileTime = DateTime.Now.ToString("MMddHHmmss");
+            }
+
+            if (AddTimeFileName.IsChecked ?? false)
+            {
+                return SaveFolderTextBox.Text + "\\" + SaveFilePrefix.Text + courseNum + "_" + _saveFileTime + ".log";
+            }
+            else
+            {
+                return SaveFolderTextBox.Text + "\\" + SaveFilePrefix.Text + courseNum + ".log";
+            }
         }
 
         /**** 以下イベントハンドラ ****/
@@ -156,7 +171,7 @@ namespace LoggerPrototype
             LogStartBtn.IsEnabled = false;
             LogTemplBtn.IsEnabled = true;
             LogEndBtn.IsEnabled = true;
-            SetSaveFilePath(GetSaveFilePath());
+            SetSaveFilePath(GetSaveFilePath(true));
             SetEnableWriting(true);
 
             PrintInfo("パス名\"" + GetSaveFilePath() + "\"で保存を開始します．");

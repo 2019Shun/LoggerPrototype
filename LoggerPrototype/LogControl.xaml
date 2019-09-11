@@ -17,11 +17,13 @@
                 </Grid>
                 <Grid Margin="10,5,10,5">
                     <TextBlock Text="プレフィックス" Margin="0,0,330,0" TextAlignment="Left" FontSize="12" VerticalAlignment="Center" HorizontalAlignment="Center" />
-                    <TextBox x:Name="SaveFilePrefix" Margin="80,0,0,0" VerticalAlignment="Center" FontSize="14" InputMethod.IsInputMethodEnabled="False" PreviewTextInput="SaveFilePrefix_PreviewTextInput" />
+                    <TextBox x:Name="SaveFilePrefix" Margin="80,0,200,0" VerticalAlignment="Center" FontSize="14" InputMethod.IsInputMethodEnabled="False" PreviewTextInput="SaveFilePrefix_PreviewTextInput" />
+                    <TextBlock Text="開始番号" Margin="80,0,0,0" TextAlignment="Left" FontSize="12" VerticalAlignment="Center" HorizontalAlignment="Center" />
+                    <TextBox x:Name="SaveCourse" Margin="280,0,0,0" VerticalAlignment="Center" FontSize="14" InputMethod.IsInputMethodEnabled="False" PreviewTextInput="SaveCourse_PreviewTextInput" CommandManager.PreviewExecuted="SaveCourse_PreviewExecuted" TextChanged="SaveCourse_TextChanged" />
                 </Grid>
                 <Grid Margin="10,5,10,5">
-                    <TextBlock Text="コース" Margin="0,0,330,0" TextAlignment="Left" FontSize="12" VerticalAlignment="Center" HorizontalAlignment="Center" />
-                    <TextBox x:Name="SaveCourse" Margin="80,0,200,0" VerticalAlignment="Center" FontSize="14" InputMethod.IsInputMethodEnabled="False" PreviewTextInput="SaveCourse_PreviewTextInput" CommandManager.PreviewExecuted="SaveCourse_PreviewExecuted" TextChanged="SaveCourse_TextChanged" />
+                    <TextBlock Text="ファイル名に時刻をつける" Margin="0,0,275,0" TextAlignment="Left" FontSize="12" VerticalAlignment="Center" HorizontalAlignment="Center" />
+                    <CheckBox x:Name="AddTimeFileName" Margin="0,0,100,0" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                     <TextBlock Text="保存サイズ" Margin="80,0,0,0" TextAlignment="Left" FontSize="12" VerticalAlignment="Center" HorizontalAlignment="Center" />
                     <TextBox x:Name="SaveCapacity" Margin="280,0,00,0" VerticalAlignment="Center" FontSize="14" IsReadOnly="True"/>
                 </Grid>
