@@ -19,12 +19,21 @@ namespace LoggerPrototype
     /// </summary>
     public partial class HexAntenna : Window
     {
+        /// <summary>
+        /// シリアル通信で文字列を送信する関数
+        /// </summary>
         public Action<string> SerialWriteString;
 
+        /// <summary>
+        /// コンストラクタ
+        /// </summary>
         public HexAntenna()
         {
             InitializeComponent();
         }
+
+        /**** 以下イベントハンドラ ****/
+        /**** 6面＊垂直/水平で12個 ****/
 
         private void AV1_Click(object sender, RoutedEventArgs e)
         {

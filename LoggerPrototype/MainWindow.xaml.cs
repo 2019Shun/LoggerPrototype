@@ -156,6 +156,7 @@ namespace LoggerPrototype
             _logControl.SetEnableWriting = _logManagement.SetEnableWriting;
             _logControl.SetSaveFilePath = _logManagement.SetSaveFilePath;
             _logControl.PrintInfo = PrintInfo;
+            _logControl.IsOpenSerialPort = () => { return (_serialPort?.IsOpen ?? false) == true; };
             _logControl.Show();
             _logManagement.SetSaveFileCapacity = _logControl.SetSaveFileCapacity;
         }
