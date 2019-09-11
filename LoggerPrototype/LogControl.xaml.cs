@@ -48,8 +48,16 @@ namespace LoggerPrototype
             get { return _courseNum.ToString(); }
             set
             {
-                _courseNum = int.Parse(value);
-                SaveCourse.Text = value;
+                try
+                {
+                    _courseNum = int.Parse(value);
+                    SaveCourse.Text = value;
+                }
+                catch
+                {
+                    _courseNum = 0;
+                    SaveCourse.Text = "0";
+                }
             }
         }
 
@@ -72,7 +80,13 @@ namespace LoggerPrototype
         /// <param name="value"></param>
         public void SetSaveFileCapacity(int value)
         {
-            SaveCapacity.Text = value.ToString() + " [Byte]";
+            SaveCapacity.Dispatcher.Invoke(
+                new Action(() =>
+                {
+                    SaveCapacity.Text = value.ToString() + " [Byte]";
+                })
+            );
+            
         }
 
         /// <summary>

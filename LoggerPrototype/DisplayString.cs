@@ -32,7 +32,7 @@ namespace LoggerPrototype
         /// </summary>
         /// <param name="bufferLength"></param>
         /// <param name="removeLength"></param>
-        public DisplayString(int bufferLength = 2000, int removeLength = 100)
+        public DisplayString(int bufferLength = 1000, int removeLength = 100)
         {
             BufferLength = bufferLength;
             RemoveLength = removeLength;

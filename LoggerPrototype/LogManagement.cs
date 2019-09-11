@@ -56,17 +56,29 @@ namespace LoggerPrototype
             SetSaveFileCapacity(_saveFileCapacity);
         }
 
+        /// <summary>
+        /// ファイル書き込みの許可
+        /// </summary>
+        /// <param name="isEnable"></param>
         public void SetEnableWriting(bool isEnable)
         {
             _saveFileCapacity = 0;
             _enableWriting = isEnable;
         }
 
+        /// <summary>
+        /// ファイル名を設定する
+        /// </summary>
+        /// <param name="fn"></param>
         public void SetSaveFilePath(string fn)
         {
             _saveFileName = fn;
         }
 
+        /// <summary>
+        /// 保存したファイルサイズを取得
+        /// </summary>
+        /// <returns></returns>
         public int GetSaveFileCapacity()
         {
             return _saveFileCapacity;

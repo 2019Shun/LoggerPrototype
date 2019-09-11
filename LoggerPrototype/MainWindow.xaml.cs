@@ -32,7 +32,20 @@ namespace LoggerPrototype
         /// </summary>
         private SerialPort _serialPort;
 
+        /// <summary>
+        /// ファイルへの書き込み関連
+        /// </summary>
         private LogManagement _logManagement;
+
+        /// <summary>
+        /// ログ管理コンソール
+        /// </summary>
+        private LogControl _logControl;
+
+        /// <summary>
+        /// 6面体アンテナ選択コンソール
+        /// </summary>
+        private HexAntenna _hexAntenna;
 
         /// <summary>
         /// 自動スクロールのオンオフを管理するプロパティ
@@ -126,6 +139,12 @@ namespace LoggerPrototype
         /// </summary>
         private void LogManagementInterface()
         {
+            if(_logControl != null)
+            {
+                _logControl.Close();
+                _logControl = null;
+            }
+
             if(_logManagement != null)
             {
                 _logManagement = null;
@@ -133,12 +152,28 @@ namespace LoggerPrototype
 
             _logManagement = new LogManagement();
 
-            var logControl = new LogControl();
-            logControl.SetEnableWriting = _logManagement.SetEnableWriting;
-            logControl.SetSaveFilePath = _logManagement.SetSaveFilePath;
-            logControl.PrintInfo = PrintInfo;
-            logControl.Show();
-            _logManagement.SetSaveFileCapacity = logControl.SetSaveFileCapacity;
+            _logControl = new LogControl();
+            _logControl.SetEnableWriting = _logManagement.SetEnableWriting;
+            _logControl.SetSaveFilePath = _logManagement.SetSaveFilePath;
+            _logControl.PrintInfo = PrintInfo;
+            _logControl.Show();
+            _logManagement.SetSaveFileCapacity = _logControl.SetSaveFileCapacity;
+        }
+
+        /// <summary>
+        /// 6面体アンテナ選択ウィンドウの表示
+        /// </summary>
+        private void HexAntennaInterface()
+        {
+            if(_hexAntenna != null)
+            {
+                _hexAntenna.Close();
+                _hexAntenna = null;
+            }
+
+            _hexAntenna = new HexAntenna();
+            _hexAntenna.SerialWriteString = SerialWriteString;
+            _hexAntenna.Show();
         }
 
         /// <summary>
@@ -232,8 +267,7 @@ namespace LoggerPrototype
                 SerialLogTextBox.Dispatcher.Invoke(
                     new Action(() =>
                     {
-                        SerialPort serialPort = (SerialPort)sender;
-                        string str = serialPort.ReadExisting();
+                        string str = _serialPort.ReadExisting();
                         Print(str);
                         _logManagement?.LogManagementString(str);
                     })
@@ -244,8 +278,7 @@ namespace LoggerPrototype
                 SerialLogTextBox.Dispatcher.Invoke(
                     new Action(() =>
                     {
-                        SerialPort serialPort = (SerialPort)sender;
-                        PrintWarning("Failed communication with " + serialPort.PortName);
+                        PrintWarning("Failed communication with " + _serialPort.PortName);
                     })
                 );
             }
@@ -303,5 +336,26 @@ namespace LoggerPrototype
         {
             SerialWriteString(e.Text);
         }
+
+        /// <summary>
+        /// メニューからログ管理ウィンドウを表示する
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void MenuLogControl_Click(object sender, RoutedEventArgs e)
+        {
+            LogManagementInterface();
+        }
+
+        /// <summary>
+        /// メニューから6面体アンテナ選択ウィンドウを表示する
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void MenuHexAntenna_Click(object sender, RoutedEventArgs e)
+        {
+            HexAntennaInterface();
+        }
+
     }
 }
