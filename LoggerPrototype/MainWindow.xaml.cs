@@ -14,6 +14,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.IO;
 using System.IO.Ports;
+using System.Threading;
 
 namespace LoggerPrototype
 {
@@ -130,6 +131,11 @@ namespace LoggerPrototype
             }
 
             _serialPort.Write(str);
+            //foreach (var i in str)
+            //{
+            //    _serialPort.Write(i.ToString());
+            //    Thread.Sleep(100);
+            //}
             PrintData(str);
         }
 
@@ -253,7 +259,11 @@ namespace LoggerPrototype
         /// <param name="e"></param>
         private void MenuItem_Click(object sender, RoutedEventArgs e)
         {
-            PrintWarning("test");
+            foreach(char i in Environment.NewLine)
+            {
+                PrintInfo(((int)i).ToString());
+            }
+            //PrintWarning(Environment.NewLine);
         }
 
         /// <summary>

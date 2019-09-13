@@ -11,6 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using System.Threading;
 
 namespace LoggerPrototype
 {
@@ -37,62 +38,62 @@ namespace LoggerPrototype
 
         private void AV1_Click(object sender, RoutedEventArgs e)
         {
-            SerialWriteString("*AV1");
+            SerialWriteString("*AV1" + Environment.NewLine);
         }
 
         private void AH1_Click(object sender, RoutedEventArgs e)
         {
-            SerialWriteString("*AH1");
+            SerialWriteString("*AH1" + Environment.NewLine);
         }
 
         private void AV2_Click(object sender, RoutedEventArgs e)
         {
-            SerialWriteString("*AV2");
+            SerialWriteString("*AV2" + Environment.NewLine);
         }
 
         private void AH2_Click(object sender, RoutedEventArgs e)
         {
-            SerialWriteString("*AH2");
+            SerialWriteString("*AH2" + Environment.NewLine);
         }
 
         private void AV3_Click(object sender, RoutedEventArgs e)
         {
-            SerialWriteString("*AV3");
+            SerialWriteString("*AV3" + Environment.NewLine);
         }
 
         private void AH3_Click(object sender, RoutedEventArgs e)
         {
-            SerialWriteString("*AH3");
+            SerialWriteString("*AH3" + Environment.NewLine);
         }
 
         private void AV4_Click(object sender, RoutedEventArgs e)
         {
-            SerialWriteString("*AV4");
+            SerialWriteString("*AV4" + Environment.NewLine);
         }
 
         private void AH4_Click(object sender, RoutedEventArgs e)
         {
-            SerialWriteString("*AH4");
+            SerialWriteString("*AH4" + Environment.NewLine);
         }
 
         private void AV5_Click(object sender, RoutedEventArgs e)
         {
-            SerialWriteString("*AV5");
+            SerialWriteString("*AV5" + Environment.NewLine);
         }
 
         private void AH5_Click(object sender, RoutedEventArgs e)
         {
-            SerialWriteString("*AH5");
+            SerialWriteString("*AH5" + Environment.NewLine);
         }
 
         private void AV6_Click(object sender, RoutedEventArgs e)
         {
-            SerialWriteString("*AV6");
+            SerialWriteString("*AV6" + Environment.NewLine);
         }
 
         private void AH6_Click(object sender, RoutedEventArgs e)
         {
-            SerialWriteString("*AH6");
+            SerialWriteString("*AH6" + Environment.NewLine);
         }
     }
 }

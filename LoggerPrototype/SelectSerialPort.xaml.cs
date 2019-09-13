@@ -66,12 +66,12 @@ namespace LoggerPrototype
         /// </summary>
         public void SetBaudRate()
         {
-            int[] baudRate = { 4800, 9600, 115200 };
+            int[] baudRate = { 4800, 9600, 19200, 115200 };
             foreach(var i in baudRate)
             {
                 SerialBaudRate.Items.Add(i.ToString());
             }
-            SerialBaudRate.SelectedIndex = 1;
+            SerialBaudRate.SelectedIndex = 2;
         }
 
         /// <summary>
