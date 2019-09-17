@@ -25,11 +25,6 @@ namespace LoggerPrototype
         private int _saveFileCapacity;
 
         /// <summary>
-        /// LogControlに保存容量を表示するための関数
-        /// </summary>
-        public Action<int> SetSaveFileCapacity;
-
-        /// <summary>
         /// コンストラクタ
         /// </summary>
         public LogManagement()
@@ -53,7 +48,6 @@ namespace LoggerPrototype
             File.AppendAllText(_saveFileName, str);
             Encoding sjisEnc = Encoding.GetEncoding("UTF-8");
             _saveFileCapacity += sjisEnc.GetByteCount(str);
-            SetSaveFileCapacity(_saveFileCapacity);
         }
 
         /// <summary>

@@ -65,7 +65,6 @@ namespace LoggerPrototype
             InitializeComponent();
 
             ConnectSerialInterface();
-            LogManagementInterface();
 
             _displayString = new DisplayString();
             _enableAutoScroll = true;
@@ -103,10 +102,6 @@ namespace LoggerPrototype
             _serialPort.PortName = port;
             _serialPort.BaudRate = baud;
             _serialPort.NewLine = Environment.NewLine;
-            //SerialPort.Parity = System.IO.Ports.Parity.None;
-            //SerialPort.DataBits = 8;
-            //SerialPort.StopBits = System.IO.Ports.StopBits.One;
-            //SerialPort.Handshake = System.IO.Ports.Handshake.None;
             _serialPort.Open();
             _serialPort.DiscardInBuffer();
 
@@ -130,11 +125,6 @@ namespace LoggerPrototype
             }
 
             _serialPort.Write(str);
-            //foreach (var i in str)
-            //{
-            //    _serialPort.Write(i.ToString());
-            //    Thread.Sleep(100);
-            //}
             PrintData(str);
         }
 
@@ -160,10 +150,10 @@ namespace LoggerPrototype
             _logControl = new LogControl();
             _logControl.SetEnableWriting = _logManagement.SetEnableWriting;
             _logControl.SetSaveFilePath = _logManagement.SetSaveFilePath;
+            _logControl.GetSaveFileCapacity = _logManagement.GetSaveFileCapacity;
             _logControl.PrintInfo = PrintInfo;
             _logControl.IsOpenSerialPort = () => { return (_serialPort?.IsOpen ?? false) == true; };
             _logControl.Show();
-            _logManagement.SetSaveFileCapacity = _logControl.SetSaveFileCapacity;
         }
 
         /// <summary>
@@ -250,20 +240,6 @@ namespace LoggerPrototype
         }
 
         /**** 以下イベントハンドラ ****/
-
-        /// <summary>
-        /// デバッグ用．後で消す
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void MenuItem_Click(object sender, RoutedEventArgs e)
-        {
-            foreach(char i in Environment.NewLine)
-            {
-                PrintInfo(((int)i).ToString());
-            }
-            //PrintWarning(Environment.NewLine);
-        }
 
         /// <summary>
         /// シリアルポートからデータを受信した際に実行されるイベントハンドラ

@@ -12,6 +12,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using System.Timers;
 
 namespace LoggerPrototype
 {
@@ -41,12 +42,25 @@ namespace LoggerPrototype
         public Func<bool> IsOpenSerialPort;
 
         /// <summary>
+        /// セーブファイルの容量を取得
+        /// </summary>
+        public Func<int> GetSaveFileCapacity;
+
+        /// <summary>
         /// 現在のコース番号
         /// </summary>
         private int _courseNum;
 
+        /// <summary>
+        /// セーブファイル名に用いる時間
+        /// </summary>
         private string _saveFileTime;
-        
+
+        /// <summary>
+        /// セーブファイルの容量表示を定期的更新
+        /// </summary>
+        private Timer _timer;
+
         /// <summary>
         /// 現在のコース番号をstringで扱う際のプロパティ
         /// </summary>
@@ -79,21 +93,29 @@ namespace LoggerPrototype
             LogEndBtn.IsEnabled = false;
 
             courseNum = "0";
+
+            _timer = new Timer(10);
+            _timer.Elapsed += (sender, e) => {
+                SetSaveFileCapacity();
+            };
+            _timer.Start();
+
+
         }
 
         /// <summary>
         /// 保存したファイルの容量を画面に表示
         /// </summary>
         /// <param name="value"></param>
-        public void SetSaveFileCapacity(int value)
+        public void SetSaveFileCapacity()
         {
             SaveCapacity.Dispatcher.Invoke(
                 new Action(() =>
                 {
-                    SaveCapacity.Text = value.ToString() + " [Byte]";
+                    SaveCapacity.Text = GetSaveFileCapacity().ToString() + " [Byte]";
                 })
             );
-            
+
         }
 
         /// <summary>

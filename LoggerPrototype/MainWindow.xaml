@@ -10,7 +10,6 @@
         <Menu>
             <MenuItem Header="ファイル(_F)">
                 <MenuItem IsCheckable="False" Header="新しい接続" Click="MenuItemConnectSerialPort_Click" />
-                <MenuItem IsCheckable="False" Header="Debug" Click="MenuItem_Click" />
                 <Separator />
                 <MenuItem IsCheckable="False" Header="接続断" Click="MenuItemSerialPortClose_Click" />
                 <MenuItem IsCheckable="False" Header="終了" Click="MenuApplicationShutdown_Click"/>
