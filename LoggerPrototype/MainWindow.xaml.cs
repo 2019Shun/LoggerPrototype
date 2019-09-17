@@ -114,7 +114,6 @@ namespace LoggerPrototype
             PrintInfo(_serialPort.PortName + "と通信を開始しました．");
 
             _serialPort.DataReceived += new SerialDataReceivedEventHandler(SerialPort_DataReceivedHandler);
-
         }
 
         /// <summary>
