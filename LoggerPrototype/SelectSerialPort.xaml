@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:LoggerPrototype"
         ResizeMode="NoResize"
         mc:Ignorable="d"
-        Title="SelectSerialPort" Height="200" Width="400">
+        Title="COMポート選択" Height="200" Width="400">
     <Grid>
         <Border BorderBrush="Black" BorderThickness="1" Margin="10,10,10,0" VerticalAlignment="Top" Height="90">
             <UniformGrid Columns="1">

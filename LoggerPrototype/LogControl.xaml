@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:LoggerPrototype"
         mc:Ignorable="d"
         ResizeMode="NoResize"
-        Title="LogControl" Height="205" Width="450">
+        Title="ログ" Height="205" Width="450">
     <Grid>
         <Border BorderBrush="Black" BorderThickness="1" Margin="10,10,10,0" VerticalAlignment="Top" Height="100">
             <UniformGrid Columns="1" Rows="3">
