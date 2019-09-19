@@ -21,6 +21,7 @@
             </MenuItem>
             <MenuItem Header="表示(_V)">
                 <MenuItem IsCheckable="False" Header="ログ" Click="MenuLogControl_Click" />
+                <MenuItem IsCheckable="False" Header="パケット送信" Click="MenuPacketSend_Click" />
                 <MenuItem IsCheckable="False" Header="6面体アンテナ" Click="MenuHexAntenna_Click" />
             </MenuItem>
         </Menu>

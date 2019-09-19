@@ -92,7 +92,7 @@ namespace LoggerPrototype
             LogTemplBtn.IsEnabled = false;
             LogEndBtn.IsEnabled = false;
 
-            courseNum = "0";
+            courseNum = "1";
 
             _timer = new Timer(10);
             _timer.Elapsed += (sender, e) => {

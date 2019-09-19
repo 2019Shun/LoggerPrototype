@@ -49,6 +49,11 @@ namespace LoggerPrototype
         private HexAntenna _hexAntenna;
 
         /// <summary>
+        /// パケット送信コンソール
+        /// </summary>
+        private PacketSend _packetSend;
+
+        /// <summary>
         /// 自動スクロールのオンオフを管理するプロパティ
         /// </summary>
         private bool _enableAutoScroll
@@ -170,6 +175,22 @@ namespace LoggerPrototype
             _hexAntenna = new HexAntenna();
             _hexAntenna.SerialWriteString = SerialWriteString;
             _hexAntenna.Show();
+        }
+
+        /// <summary>
+        /// パケット送信ウィンドウの表示
+        /// </summary>
+        private void PacketSendInterface()
+        {
+            if (_packetSend != null)
+            {
+                _packetSend.Close();
+                _packetSend = null;
+            }
+
+            _packetSend = new PacketSend();
+            _packetSend.SerialWriteString = SerialWriteString;
+            _packetSend.Show();
         }
 
         /// <summary>
@@ -343,5 +364,14 @@ namespace LoggerPrototype
             HexAntennaInterface();
         }
 
+        /// <summary>
+        /// メニューからパケット送信ウィンドウを表示する
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void MenuPacketSend_Click(object sender, RoutedEventArgs e)
+        {
+            PacketSendInterface();
+        }
     }
 }

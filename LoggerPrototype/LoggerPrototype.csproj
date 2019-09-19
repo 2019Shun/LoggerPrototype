@@ -91,6 +91,9 @@
       <DependentUpon>LogControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="LogManagement.cs" />
+    <Compile Include="PacketSend.xaml.cs">
+      <DependentUpon>PacketSend.xaml</DependentUpon>
+    </Compile>
     <Compile Include="SelectSerialPort.xaml.cs">
       <DependentUpon>SelectSerialPort.xaml</DependentUpon>
     </Compile>
@@ -114,6 +117,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="PacketSend.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="SelectSerialPort.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
