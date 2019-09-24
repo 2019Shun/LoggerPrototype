@@ -61,7 +61,7 @@ namespace LoggerPrototype
             get { return MenuItemAutoScroll.IsChecked; }
             set { MenuItemAutoScroll.IsChecked = value; }
         }
-        
+
         /// <summary>
         /// コンストラクタ
         /// </summary>
@@ -103,17 +103,25 @@ namespace LoggerPrototype
                 _serialPort.Close();
                 _serialPort = null;
             }
-            _serialPort = new SerialPort();
-            _serialPort.PortName = port;
-            _serialPort.BaudRate = baud;
-            _serialPort.NewLine = Environment.NewLine;
-            _serialPort.Open();
-            _serialPort.DiscardInBuffer();
 
-            DisplayClear();
-            PrintInfo(_serialPort.PortName + "と通信を開始しました．");
+            try
+            {
+                _serialPort = new SerialPort();
+                _serialPort.PortName = port;
+                _serialPort.BaudRate = baud;
+                _serialPort.NewLine = Environment.NewLine;
+                _serialPort.Open();
+                _serialPort.DiscardInBuffer();
 
-            _serialPort.DataReceived += new SerialDataReceivedEventHandler(SerialPort_DataReceivedHandler);
+                DisplayClear();
+                PrintInfo(_serialPort.PortName + "と通信を開始しました．");
+
+                _serialPort.DataReceived += new SerialDataReceivedEventHandler(SerialPort_DataReceivedHandler);
+            }
+            catch
+            {
+                PrintInfo("COMポートの接続に失敗しました．");
+            }
         }
 
         /// <summary>
@@ -139,13 +147,13 @@ namespace LoggerPrototype
         /// </summary>
         private void LogManagementInterface()
         {
-            if(_logControl != null)
+            if (_logControl != null)
             {
                 _logControl.Close();
                 _logControl = null;
             }
 
-            if(_logManagement != null)
+            if (_logManagement != null)
             {
                 _logManagement = null;
             }
@@ -166,7 +174,7 @@ namespace LoggerPrototype
         /// </summary>
         private void HexAntennaInterface()
         {
-            if(_hexAntenna != null)
+            if (_hexAntenna != null)
             {
                 _hexAntenna.Close();
                 _hexAntenna = null;
@@ -257,7 +265,7 @@ namespace LoggerPrototype
             SerialLogTextBox.Text = "";
 
             ///右側の画面出力はクリアしなくてもいい？
-            //SerialLogTextBox2.Document.Blocks.Clear();
+            SerialLogTextBox2.Document.Blocks.Clear();
         }
 
         /**** 以下イベントハンドラ ****/
