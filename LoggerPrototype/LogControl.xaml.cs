@@ -13,6 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using System.Timers;
+using System.IO;
 
 namespace LoggerPrototype
 {
@@ -125,19 +126,37 @@ namespace LoggerPrototype
         /// <returns></returns>
         private string GetSaveFilePath(bool initialize = false)
         {
+
             if (initialize)
             {
                 _saveFileTime = DateTime.Now.ToString("MMddHHmmss");
             }
 
+            string fn;
             if (AddTimeFileName.IsChecked ?? false)
             {
-                return SaveFolderTextBox.Text + "\\" + SaveFilePrefix.Text + courseNum + "_" + _saveFileTime + ".log";
+                fn = SaveFilePrefix.Text + courseNum + "_" + _saveFileTime + ".log";
             }
             else
             {
-                return SaveFolderTextBox.Text + "\\" + SaveFilePrefix.Text + courseNum + ".log";
+                fn = SaveFilePrefix.Text + courseNum + ".log";
             }
+
+            if(SaveFolderTextBox2.Text == "")
+            {
+                return SaveFolderTextBox.Text + "\\" + fn;
+            }
+            else
+            {
+                var fp = SaveFolderTextBox.Text + "\\" + SaveFolderTextBox2.Text;
+                if (!Directory.Exists(fp))
+                {
+                    Directory.CreateDirectory(fp);
+                }
+                return fp + "\\" + fn;
+            }
+
+
         }
 
         /**** 以下イベントハンドラ ****/
@@ -164,6 +183,29 @@ namespace LoggerPrototype
             }
         }
 
+        private bool CheckTextBox()
+        {
+            if (SaveFolderTextBox.Text == "")
+            {
+                MessageBox.Show("保存するフォルダを選択してください．", "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return false;
+            }
+
+            if (SaveCourse.Text == "")
+            {
+                MessageBox.Show("コースの開始番号を入力してください", "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return false;
+            }
+
+            if (!IsOpenSerialPort())
+            {
+                MessageBox.Show("シリアルポートが開かれていません．", "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return false;
+            }
+
+            return true;
+        }
+
         /// <summary>
         /// 「開始」を押した際のイベントハンドラ
         /// 各々のエラーチェックをして，通ったらログ取得を開始する
@@ -172,21 +214,8 @@ namespace LoggerPrototype
         /// <param name="e"></param>
         private void LogStartBtn_Click(object sender, RoutedEventArgs e)
         {
-            if(SaveFolderTextBox.Text == "")
+            if (!CheckTextBox())
             {
-                MessageBox.Show("保存するフォルダを選択してください．", "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
-                return;
-            }
-
-            if (SaveCourse.Text == "")
-            {
-                MessageBox.Show("コースの開始番号を入力してください", "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
-                return;
-            }
-
-            if (!IsOpenSerialPort())
-            {
-                MessageBox.Show("シリアルポートが開かれていません．", "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
 
@@ -226,7 +255,7 @@ namespace LoggerPrototype
             LogStartBtn.IsEnabled = true;
             LogTemplBtn.IsEnabled = false;
             LogEndBtn.IsEnabled = false;
-            courseNum = "0";
+            courseNum = "1";
             SetEnableWriting(false);
 
             PrintInfo("測定を終了します．");
@@ -250,11 +279,11 @@ namespace LoggerPrototype
         /// <param name="e"></param>
         private void SaveCourse_PreviewExecuted(object sender, ExecutedRoutedEventArgs e)
         {
-            // 貼り付けを許可しない
-            if (e.Command == ApplicationCommands.Paste)
-            {
-                e.Handled = true;
-            }
+            //// 貼り付けを許可しない
+            //if (e.Command == ApplicationCommands.Paste)
+            //{
+            //    e.Handled = true;
+            //}
         }
 
         /// <summary>
@@ -271,6 +300,19 @@ namespace LoggerPrototype
         }
 
         /// <summary>
+        /// 保存パス名のチェック
+        /// 禁止文字の場合，入力をスルー
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void SaveFolderTextBox2_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            //ファイル名に使用できない文字を取得
+            char[] invalidChars = System.IO.Path.GetInvalidFileNameChars();
+            e.Handled = !(e.Text.IndexOfAny(invalidChars) < 0);
+        }
+
+        /// <summary>
         /// コース番号の変更を受け取る
         /// </summary>
         /// <param name="sender"></param>
@@ -278,6 +320,49 @@ namespace LoggerPrototype
         private void SaveCourse_TextChanged(object sender, TextChangedEventArgs e)
         {
             courseNum = SaveCourse.Text;
+        }
+
+        /// <summary>
+        /// 保存ファイル名の確認ウィンドウの表示
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void VerifyFolder_Click(object sender, RoutedEventArgs e)
+        {
+            if (SaveFolderTextBox.Text == "")
+            {
+                MessageBox.Show("保存するフォルダを選択してください．", "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            //PrintInfo("パス名：" + GetSaveFilePath(true));
+            MessageBox.Show(GetSaveFilePath(true), "Check save path", MessageBoxButton.OK, MessageBoxImage.Information);
+        }
+
+        /// <summary>
+        /// コース番号の値を1に戻す
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void CourseNumClear_Click(object sender, RoutedEventArgs e)
+        {
+            courseNum = "1";
+        }
+
+        private void SaveFilePrefix_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            switch (e.Key)
+            {
+                case Key.Up:
+                    courseNum = (_courseNum + 1).ToString();
+                    break;
+                case Key.Down:
+                    if (_courseNum > 1)
+                    {
+                        courseNum = (_courseNum - 1).ToString();
+                    }
+                    break;
+            }
         }
     }
 }
