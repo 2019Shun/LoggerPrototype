@@ -165,6 +165,11 @@ namespace LoggerPrototype
             _logControl.SetSaveFilePath = _logManagement.SetSaveFilePath;
             _logControl.GetSaveFileCapacity = _logManagement.GetSaveFileCapacity;
             _logControl.PrintInfo = PrintInfo;
+            _logControl.SaveBeforeBufferString = (int num) =>
+            {
+                var str = _displayString.GetString(num);
+                _logManagement?.LogManagementString(str);
+            };
             _logControl.IsOpenSerialPort = () => { return (_serialPort?.IsOpen ?? false) == true; };
             _logControl.Show();
         }

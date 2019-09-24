@@ -26,7 +26,6 @@ namespace LoggerPrototype
         /// </summary>
         public int RemoveLength { get; set; }
 
-
         /// <summary>
         /// コンストラクタ
         /// </summary>
@@ -59,6 +58,18 @@ namespace LoggerPrototype
         public string GetString()
         {
             return _contents.ToString();
+        }
+
+        public string GetString(int num)
+        {
+            if(_contents.Length > num)
+            {
+                return _contents.ToString().Substring(_contents.Length - num);
+            }
+            else
+            {
+                return _contents.ToString();
+            }
         }
 
         /// <summary>

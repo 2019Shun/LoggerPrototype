@@ -48,9 +48,10 @@ namespace LoggerPrototype
         public Func<int> GetSaveFileCapacity;
 
         /// <summary>
-        /// 現在のコース番号
+        /// セーブを開始する前に前の情報をファイルに書き込む
+        /// 事前にenableWritingをtrueにしておく必要がある
         /// </summary>
-        private int _courseNum;
+        public Action<int> SaveBeforeBufferString;
 
         /// <summary>
         /// セーブファイル名に用いる時間
@@ -61,6 +62,11 @@ namespace LoggerPrototype
         /// セーブファイルの容量表示を定期的更新
         /// </summary>
         private Timer _timer;
+
+        /// <summary>
+        /// 現在のコース番号
+        /// </summary>
+        private int _courseNum;
 
         /// <summary>
         /// 現在のコース番号をstringで扱う際のプロパティ
@@ -84,6 +90,42 @@ namespace LoggerPrototype
         }
 
         /// <summary>
+        /// 現在のコース番号
+        /// </summary>
+        private int _beforeSaveSize;
+
+        /// <summary>
+        /// 現在のコース番号をstringで扱う際のプロパティ
+        /// </summary>
+        private string beforeSaveSize
+        {
+            get
+            {
+                try
+                {
+                    return BeforeSaveCapacity.Text;
+                }
+                catch
+                {
+                    return "0";
+                }
+            }
+            set
+            {
+                try
+                {
+                    _beforeSaveSize = int.Parse(value);
+                    BeforeSaveCapacity.Text = value;
+                }
+                catch
+                {
+                    _beforeSaveSize = 0;
+                    BeforeSaveCapacity.Text = "0";
+                }
+            }
+        }
+
+        /// <summary>
         /// コンストラクタ
         /// </summary>
         public LogControl()
@@ -94,9 +136,11 @@ namespace LoggerPrototype
             LogEndBtn.IsEnabled = false;
 
             courseNum = "1";
+            beforeSaveSize = "300";
 
             _timer = new Timer(10);
-            _timer.Elapsed += (sender, e) => {
+            _timer.Elapsed += (sender, e) =>
+            {
                 SetSaveFileCapacity();
             };
             _timer.Start();
@@ -113,7 +157,7 @@ namespace LoggerPrototype
             SaveCapacity.Dispatcher.Invoke(
                 new Action(() =>
                 {
-                    SaveCapacity.Text = GetSaveFileCapacity().ToString() + " [Byte]";
+                    SaveCapacity.Text = GetSaveFileCapacity().ToString();
                 })
             );
 
@@ -142,7 +186,7 @@ namespace LoggerPrototype
                 fn = SaveFilePrefix.Text + courseNum + ".log";
             }
 
-            if(SaveFolderTextBox2.Text == "")
+            if (SaveFolderTextBox2.Text == "")
             {
                 return SaveFolderTextBox.Text + "\\" + fn;
             }
@@ -224,6 +268,8 @@ namespace LoggerPrototype
             LogEndBtn.IsEnabled = true;
             SetSaveFilePath(GetSaveFilePath(true));
             SetEnableWriting(true);
+            SaveBeforeBufferString(int.Parse(beforeSaveSize)); //前の情報をファイルに保存する
+            PrintInfo("Before size"+beforeSaveSize);
 
             PrintInfo("パス名\"" + GetSaveFilePath() + "\"で保存を開始します．");
         }
@@ -284,6 +330,16 @@ namespace LoggerPrototype
             //{
             //    e.Handled = true;
             //}
+        }
+
+        /// <summary>
+        /// 事前情報サイズを数字に制限
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void BeforeSaveCapacity_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            e.Handled = !new Regex("[0-9]").IsMatch(e.Text);
         }
 
         /// <summary>
@@ -349,6 +405,11 @@ namespace LoggerPrototype
             courseNum = "1";
         }
 
+        /// <summary>
+        /// 番号を矢印キーで値を操作できるようにする
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void SaveFilePrefix_PreviewKeyDown(object sender, KeyEventArgs e)
         {
             switch (e.Key)

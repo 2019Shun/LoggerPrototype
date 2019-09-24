@@ -45,9 +45,7 @@ namespace LoggerPrototype
                 return;
             }
 
-            File.AppendAllText(_saveFileName, str);
-            Encoding sjisEnc = Encoding.GetEncoding("UTF-8");
-            _saveFileCapacity += sjisEnc.GetByteCount(str);
+            SaveTextFile(str);
         }
 
         /// <summary>
@@ -76,6 +74,13 @@ namespace LoggerPrototype
         public int GetSaveFileCapacity()
         {
             return _saveFileCapacity;
+        }
+
+        private void SaveTextFile(string str)
+        {
+            File.AppendAllText(_saveFileName, str);
+            Encoding sjisEnc = Encoding.GetEncoding("UTF-8");
+            _saveFileCapacity += sjisEnc.GetByteCount(str);
         }
     }
 }
