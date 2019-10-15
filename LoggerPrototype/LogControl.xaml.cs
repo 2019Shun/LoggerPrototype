@@ -145,6 +145,7 @@ namespace LoggerPrototype
             };
             _timer.Start();
 
+            AddTimeFileName.IsChecked = true;
 
         }
 

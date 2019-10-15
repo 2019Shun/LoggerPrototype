@@ -87,6 +87,9 @@
     <Compile Include="HexAntenna.xaml.cs">
       <DependentUpon>HexAntenna.xaml</DependentUpon>
     </Compile>
+    <Compile Include="HexAntennaAuto.xaml.cs">
+      <DependentUpon>HexAntennaAuto.xaml</DependentUpon>
+    </Compile>
     <Compile Include="LogControl.xaml.cs">
       <DependentUpon>LogControl.xaml</DependentUpon>
     </Compile>
@@ -98,6 +101,10 @@
       <DependentUpon>SelectSerialPort.xaml</DependentUpon>
     </Compile>
     <Page Include="HexAntenna.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="HexAntennaAuto.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

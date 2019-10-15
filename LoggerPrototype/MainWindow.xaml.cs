@@ -49,9 +49,15 @@ namespace LoggerPrototype
         private HexAntenna _hexAntenna;
 
         /// <summary>
+        /// 6面体アンテナ自動切り替えコンソール
+        /// </summary>
+        private HexAntennaAuto _hexAntennaAuto;
+
+        /// <summary>
         /// パケット送信コンソール
         /// </summary>
         private PacketSend _packetSend;
+
 
         /// <summary>
         /// 自動スクロールのオンオフを管理するプロパティ
@@ -142,6 +148,24 @@ namespace LoggerPrototype
         }
 
         /// <summary>
+        /// シリアルポートが開かれていた場合，strを送信
+        /// 6面体アンテナ用
+        /// 右側画面に送信した文字列を出力
+        /// </summary>
+        /// <param name="str"></param>
+        private void SerialWriteStringForHA(string str)
+        {
+            if ((_serialPort?.IsOpen ?? false) == false)
+            {
+                PrintWarning("シリアルポートが開かれていません．");
+                return;
+            }
+
+            _serialPort.Write(str + "\r\n");
+            PrintData(str);
+        }
+
+        /// <summary>
         /// ログ関係
         /// ログコントロールウィンドウを表示
         /// </summary>
@@ -186,8 +210,24 @@ namespace LoggerPrototype
             }
 
             _hexAntenna = new HexAntenna();
-            _hexAntenna.SerialWriteString = SerialWriteString;
+            _hexAntenna.SerialWriteString = SerialWriteStringForHA;
             _hexAntenna.Show();
+        }
+
+        /// <summary>
+        /// 6面体アンテナ選択ウィンドウの表示
+        /// </summary>
+        private void HexAntennaAutoInterface()
+        {
+            if (_hexAntennaAuto != null)
+            {
+                _hexAntennaAuto.Close();
+                _hexAntennaAuto = null;
+            }
+
+            _hexAntennaAuto = new HexAntennaAuto();
+            _hexAntennaAuto.SerialWriteString = SerialWriteStringForHA;
+            _hexAntennaAuto.Show();
         }
 
         /// <summary>
@@ -228,11 +268,7 @@ namespace LoggerPrototype
         /// <param name="str"></param>
         public void PrintData(string str)
         {
-            TextRange rangeOfText = new TextRange(SerialLogTextBox2.Document.ContentEnd, SerialLogTextBox2.Document.ContentEnd);
-            rangeOfText.Text = "[SEND] " + str;
-            rangeOfText.ApplyPropertyValue(TextElement.ForegroundProperty, Brushes.AntiqueWhite);
-            SerialLogTextScroll2.ScrollToEnd();
-            SerialLogTextBox2.AppendText(Environment.NewLine);
+            Print2("[SEND] " + str, Brushes.AntiqueWhite);
         }
 
         /// <summary>
@@ -241,11 +277,7 @@ namespace LoggerPrototype
         /// <param name="str"></param>
         public void PrintInfo(string str)
         {
-            TextRange rangeOfText = new TextRange(SerialLogTextBox2.Document.ContentEnd, SerialLogTextBox2.Document.ContentEnd);
-            rangeOfText.Text = "[INFO] " + str;
-            rangeOfText.ApplyPropertyValue(TextElement.ForegroundProperty, Brushes.Aquamarine);
-            SerialLogTextScroll2.ScrollToEnd();
-            SerialLogTextBox2.AppendText(Environment.NewLine);
+            Print2("[INFO] " + str, Brushes.Aquamarine);
         }
 
         /// <summary>
@@ -254,11 +286,32 @@ namespace LoggerPrototype
         /// <param name="str"></param>
         public void PrintWarning(string str)
         {
-            TextRange rangeOfText = new TextRange(SerialLogTextBox2.Document.ContentEnd, SerialLogTextBox2.Document.ContentEnd);
-            rangeOfText.Text = "[WARN] " + str;
-            rangeOfText.ApplyPropertyValue(TextElement.ForegroundProperty, Brushes.IndianRed);
-            SerialLogTextScroll2.ScrollToEnd();
-            SerialLogTextBox2.AppendText(Environment.NewLine);
+            Print2("[WARN] " + str, Brushes.IndianRed);
+        }
+
+        /// <summary>
+        /// 右側のスクリーンにログ等を表示
+        /// 一定バイト数超過でクリア
+        /// </summary>
+        /// <param name="str"></param>
+        /// <param name="colorBrush"></param>
+        private void Print2(string str, SolidColorBrush colorBrush)
+        {
+            SerialLogTextBox2.Dispatcher.Invoke(
+                new Action(() =>
+                {
+                    TextRange rangeOfText = new TextRange(SerialLogTextBox2.Document.ContentEnd, SerialLogTextBox2.Document.ContentEnd);
+                    rangeOfText.Text = str;
+                    rangeOfText.ApplyPropertyValue(TextElement.ForegroundProperty, colorBrush);
+                    SerialLogTextScroll2.ScrollToEnd();
+                    SerialLogTextBox2.AppendText(Environment.NewLine);
+                    var tr = new TextRange(SerialLogTextBox2.Document.ContentStart, SerialLogTextBox2.Document.ContentEnd);
+                    if (tr.Text.Length > 800)
+                    {
+                        SerialLogTextBox2.Document.Blocks.Clear();
+                    }
+                })
+            );
         }
 
         /// <summary>
@@ -378,6 +431,16 @@ namespace LoggerPrototype
         }
 
         /// <summary>
+        /// メニューから6面体アンテナ(自動)選択ウィンドウを表示する
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void MenuHexAntennaAuto_Click(object sender, RoutedEventArgs e)
+        {
+            HexAntennaAutoInterface();
+        }
+
+        /// <summary>
         /// メニューからパケット送信ウィンドウを表示する
         /// </summary>
         /// <param name="sender"></param>
@@ -386,5 +449,6 @@ namespace LoggerPrototype
         {
             PacketSendInterface();
         }
+
     }
 }

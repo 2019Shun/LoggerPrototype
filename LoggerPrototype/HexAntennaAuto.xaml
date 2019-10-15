@@ -1,0 +1,35 @@
+﻿<Window x:Class="LoggerPrototype.HexAntennaAuto"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:LoggerPrototype"
+        ResizeMode="NoResize"
+        mc:Ignorable="d"
+        Title="6面体アンテナ自動切り替え" Height="210" Width="280">
+    <Grid>
+        <Border BorderBrush="Black" BorderThickness="1" Margin="10,10,10,0" VerticalAlignment="Top" Height="100">
+            <UniformGrid Columns="1" Rows="3">
+                <Grid Margin="10,5,10,5">
+                    <CheckBox x:Name="NoSignalEnable" Margin="0,0,0,0" VerticalAlignment="Center" HorizontalAlignment="Left"/>
+                    <TextBlock x:Name="NoSignalTexitBox" Text="無信号区間(ms)" Margin="20,0,0,0" TextAlignment="Center" FontSize="12" VerticalAlignment="Center" HorizontalAlignment="Left" PreviewTextInput="NoSignalTexitBox_PreviewTextInput"/>
+                    <TextBox x:Name="NoSignalValue" Margin="120,0,0,0" Width="100" VerticalAlignment="Center" HorizontalAlignment="Left" FontSize="14" />
+                </Grid>
+                <Grid Margin="10,5,10,5">
+                    <CheckBox x:Name="VerticalEnable" Margin="0,0,0,0" VerticalAlignment="Center" HorizontalAlignment="Left"/>
+                    <TextBlock x:Name="VerticalTexitBox" Text="垂直(V)偏波(ms)" Margin="20,0,0,0" TextAlignment="Center" FontSize="12" VerticalAlignment="Center" HorizontalAlignment="Left" PreviewTextInput="VerticalTexitBox_PreviewTextInput"/>
+                    <TextBox x:Name="VerticalValue" Margin="120,0,0,0" Width="100" VerticalAlignment="Center" HorizontalAlignment="Left" FontSize="14" />
+                </Grid>
+                <Grid Margin="10,5,10,5">
+                    <CheckBox x:Name="HorizontalEnable" Margin="0,0,0,0" VerticalAlignment="Center" HorizontalAlignment="Left"/>
+                    <TextBlock x:Name="HorizontalTexitBox"  Text="水平(H)偏波(ms)" Margin="20,0,0,0" TextAlignment="Center" FontSize="12" VerticalAlignment="Center" HorizontalAlignment="Left" PreviewTextInput="HorizontalTexitBox_PreviewTextInput"/>
+                    <TextBox x:Name="HorizontalValue" Margin="120,0,0,0" Width="100" VerticalAlignment="Center" HorizontalAlignment="Left" FontSize="14" />
+                </Grid>
+            </UniformGrid>
+        </Border>
+        <UniformGrid Columns="2"  Margin="10,120,10,10" VerticalAlignment="Top">
+            <Button x:Name="AutoHAStartBtn" Content="開始(_S)" Margin="0,5,0,5" Width="100" FontSize="14" VerticalAlignment="Top" Height="30" Click="AutoHAStartBtn_Click"/>
+            <Button x:Name="AutoHAEndBtn" Content="終了(_T)" Margin="0,5,0,5" Width="100" FontSize="14" VerticalAlignment="Top" Height="30" Click="AutoHAEndBtn_Click" />
+        </UniformGrid>
+    </Grid>
+</Window>

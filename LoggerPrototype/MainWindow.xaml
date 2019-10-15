@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:LoggerPrototype"
         mc:Ignorable="d"
-        Title="シリアルロガー v0.5" Height="400" Width="600">
+        Title="シリアルロガー v0.6" Height="400" Width="600">
     <Grid>
         <Menu>
             <MenuItem Header="ファイル(_F)">
@@ -23,6 +23,7 @@
                 <MenuItem IsCheckable="False" Header="ログ" Click="MenuLogControl_Click" />
                 <MenuItem IsCheckable="False" Header="パケット送信" Click="MenuPacketSend_Click" />
                 <MenuItem IsCheckable="False" Header="6面体アンテナ" Click="MenuHexAntenna_Click" />
+                <MenuItem IsCheckable="False" Header="6面体アンテナ(自動)" Click="MenuHexAntennaAuto_Click" />
             </MenuItem>
         </Menu>
         <Grid Margin="0, 0, 0,0">
