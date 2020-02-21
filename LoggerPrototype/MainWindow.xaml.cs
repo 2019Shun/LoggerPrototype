@@ -341,6 +341,19 @@ namespace LoggerPrototype
                     new Action(() =>
                     {
                         string str = _serialPort.ReadExisting();
+
+                        //タイムスタンプを入れる処理
+                        //その他タブのタイムスタンプがチェックされている時に入る
+                        if (MenuTimeStampEnable.IsChecked)
+                        {
+                            int num = str.IndexOf("\r");
+                            if(num >= 0)
+                            {
+                                DateTime dt = DateTime.Now;
+                                str = str.Insert(num, ",TimeStamp," + dt.ToString("yyyy,MM,dd,HH,mm,ss,fff"));
+                            }
+
+                        }
                         Print(str);
                         _logManagement?.LogManagementString(str);
                     })
